@@ -2,14 +2,14 @@
 
 Dự án **RAG (Retrieval-Augmented Generation)** này được thiết kế để chạy cục bộ (Local) sử dụng các kỹ thuật Deep Learning tiên tiến. Điểm khác biệt chính của dự án là việc áp dụng **Semantic Chunking** thay vì cắt file theo kích thước cố định, giúp AI hiểu ngữ cảnh tốt hơn khi truy vấn.
 
-Hệ thống sử dụng mô hình ngôn ngữ lớn (LLM) được lượng tử hóa (Quantized 4-bit) và mô hình Embedding tiếng Việt chuyên dụng.
+Hệ thống sử dụng mô hình ngôn ngữ lớn (LLM) được lượng tử hóa (Quantized 4-bit) và mô hình Embedding tiếng Việt chuyên dụng. Khuyến nghị chạy bằng Linux/Ubuntu
 
 App Web: 
 
 ## 📂 Cấu trúc dự án
 
 ```text
-My_Unique_RAG/
+RAG/
 ├── data/                  # Thư mục chứa file PDF đầu vào
 ├── src/                   # Source code
 │   ├── __init__.py
