@@ -1,4 +1,3 @@
-````markdown
 # 🤖 Local RAG with Semantic Chunking (Expert Edition)
 
 Dự án **RAG (Retrieval-Augmented Generation)** này được thiết kế để chạy cục bộ (Local) sử dụng các kỹ thuật Deep Learning tiên tiến. Điểm khác biệt chính của dự án là việc áp dụng **Semantic Chunking** thay vì cắt file theo kích thước cố định, giúp AI hiểu ngữ cảnh tốt hơn khi truy vấn.
