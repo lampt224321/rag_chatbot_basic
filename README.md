@@ -1,116 +1,163 @@
+
+---
+
 # 🤖 Local RAG with Semantic Chunking (Expert Edition)
 
-Dự án **RAG (Retrieval-Augmented Generation)** này được thiết kế để chạy cục bộ (Local) sử dụng các kỹ thuật Deep Learning tiên tiến. Điểm khác biệt chính của dự án là việc áp dụng **Semantic Chunking** thay vì cắt file theo kích thước cố định, giúp AI hiểu ngữ cảnh tốt hơn khi truy vấn.
+This project implements a **local Retrieval-Augmented Generation (RAG)** system powered by advanced **Deep Learning** techniques.
+The key differentiation lies in the use of **Semantic Chunking** instead of traditional fixed-size text splitting, enabling the AI system to preserve semantic coherence and achieve significantly better contextual understanding during retrieval.
 
-Hệ thống sử dụng mô hình ngôn ngữ lớn (LLM) được lượng tử hóa (Quantized 4-bit) và mô hình Embedding tiếng Việt chuyên dụng. Khuyến nghị chạy bằng Linux/Ubuntu
+The system runs entirely **locally**, leveraging a **4-bit quantized Large Language Model (LLM)** and a **Vietnamese-specialized embedding model**.
+Linux / Ubuntu is strongly recommended for optimal performance.
 
-App Web: 
+**Web App:** *(Streamlit-based interface)*
 
-## 📂 Cấu trúc dự án
+---
+
+## 📂 Project Structure
 
 ```text
 RAG/
-├── data/                  # Thư mục chứa file PDF đầu vào
+├── data/                  # Input PDF documents
 ├── src/                   # Source code
 │   ├── __init__.py
-│   ├── config.py          # Cấu hình Hyperparameters (Model ID, Chunking thresholds)
-│   ├── model_loader.py    # Quản lý load LLM (BitsAndBytes) & Embeddings
-│   ├── vector_db.py       # Xử lý PDF & Semantic Chunking logic
-│   └── utils.py           # Các tiện ích bổ trợ
-├── app.py                 # Giao diện chính (Streamlit)
-├── requirements.txt       # Danh sách thư viện cần thiết
-└── README.md              # Tài liệu hướng dẫn
-````
+│   ├── config.py          # Hyperparameter configuration (Model IDs, chunking thresholds)
+│   ├── model_loader.py    # LLM & embedding loader (BitsAndBytes integration)
+│   ├── vector_db.py       # PDF processing & semantic chunking logic
+│   └── utils.py           # Utility functions
+├── app.py                 # Main Streamlit application
+├── requirements.txt       # Dependencies
+└── README.md              # Documentation
+```
 
-## 🚀 Tính năng nổi bật
+---
 
-  * **🧠 Semantic Chunking (Phân đoạn theo ngữ nghĩa):**
-      * Sử dụng `LangChain Experimental SemanticChunker`.
-      * Không cắt văn bản máy móc theo ký tự. Hệ thống phân tích sự thay đổi về ngữ nghĩa (cosine similarity) giữa các câu để quyết định điểm ngắt (breakpoint).
-      * Cấu hình: Dựa trên ngưỡng phân vị (Percentile Threshold) để đảm bảo các đoạn văn giữ trọn vẹn ý nghĩa.
-  * **⚡ Optimized Local LLM:**
-      * Sử dụng model `lmsys/vicuna-7b-v1.5`.
-      * Tối ưu hóa bộ nhớ với **4-bit Quantization (NF4)** sử dụng thư viện `bitsandbytes`, cho phép chạy trên GPU có VRAM khiêm tốn (Consumer GPU).
-  * **🇻🇳 Vietnamese Embedding:**
-      * Tích hợp model `bkai-foundation-models/vietnamese-bi-encoder` để tối ưu hóa khả năng tìm kiếm văn bản tiếng Việt.
-  * **💬 Conversational Memory:**
-      * Hỗ trợ nhớ ngữ cảnh hội thoại cũ, giúp hỏi đáp tự nhiên hơn.
+## 🚀 Key Features
 
-## 🛠 Yêu cầu hệ thống
+### 🧠 Semantic Chunking (Meaning-Aware Text Segmentation)
 
-  * **OS:** Linux (Ubuntu) hoặc Windows (WSL2 recommended).
-  * **Python:** 3.10+
-  * **GPU:** NVIDIA GPU (VRAM \>= 6GB recommended) để chạy 4-bit quantization.
-  * **CUDA:** Đã cài đặt CUDA Toolkit tương thích với PyTorch.
+* Built on **`LangChain Experimental SemanticChunker`**.
+* Text is **not split mechanically** by character or token count.
+* The system analyzes **semantic shifts between sentences** using **cosine similarity** to determine chunk boundaries.
+* Chunk breakpoints are computed using **percentile-based thresholds**, ensuring each chunk preserves complete semantic intent.
 
-## ⚙️ Cài đặt
+### ⚡ Optimized Local LLM Inference
 
-1.  **Clone dự án:**
+* Uses **`lmsys/vicuna-7b-v1.5`**.
+* Memory-efficient **4-bit quantization (NF4)** via `bitsandbytes`.
+* Enables local inference on **consumer-grade GPUs with limited VRAM**.
 
-    ```bash
-    git clone https://github.com/lampt224321/rag_chatbot_basic.git
-    cd rag_chatbot_basic
-    ```
+### 🇻🇳 Vietnamese-Specific Embeddings
 
-2.  **Tạo môi trường ảo:**
+* Integrates **`bkai-foundation-models/vietnamese-bi-encoder`**.
+* Significantly improves semantic retrieval quality for **Vietnamese-language documents**.
 
-    ```bash
-    python -m venv venv
-    # Windows
-    .\venv\Scripts\activate
-    # Linux/Mac
-    source venv/bin/activate
-    ```
+### 💬 Conversational Memory
 
-3.  **Cài đặt thư viện:**
+* Maintains multi-turn conversation history.
+* Allows natural, context-aware follow-up questions over retrieved documents.
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+---
 
-    *(Lưu ý: Nếu dùng Windows, bạn có thể cần cài `bitsandbytes-windows` nếu gặp lỗi về thư viện bnb).*
+## 🛠 System Requirements
 
-## 📖 Hướng dẫn sử dụng
+* **Operating System:** Linux (Ubuntu preferred) or Windows (WSL2 recommended)
+* **Python:** 3.10+
+* **GPU:** NVIDIA GPU (≥ 6GB VRAM recommended)
+* **CUDA:** CUDA Toolkit compatible with PyTorch
 
-1.  **Khởi chạy ứng dụng:**
-    Từ thư mục gốc `My_Unique_RAG`, chạy lệnh:
+---
 
-    ```bash
-    streamlit run app.py
-    ```
+## ⚙️ Installation
 
-2.  **Sử dụng trên giao diện:**
+### 1️⃣ Clone the Repository
 
-      * Chờ hệ thống load model (Vicuna & Embedding) lần đầu tiên (sẽ tốn vài phút tùy tốc độ mạng).
-      * Tải lên file PDF ở thanh bên trái (Sidebar).
-      * Nhấn **"🚀 Xử lý tài liệu"**. Hệ thống sẽ thực hiện *Semantic Chunking* và tạo index vào ChromaDB.
-      * Bắt đầu chat với tài liệu của bạn.
+```bash
+git clone https://github.com/lampt224321/rag_chatbot_basic.git
+cd rag_chatbot_basic
+```
 
-## 🔧 Cấu hình nâng cao (Config)
+### 2️⃣ Create a Virtual Environment
 
-Bạn có thể tinh chỉnh các tham số trong `src/config.py`:
+```bash
+python -m venv venv
 
-| Tham số | Giá trị mặc định | Mô tả |
-| :--- | :--- | :--- |
-| `CHUNK_BREAKPOINT_TYPE` | "percentile" | Cách tính điểm ngắt đoạn (theo phần trăm sự khác biệt). |
-| `CHUNK_BREAKPOINT_AMOUNT`| 95 | Ngưỡng tương đồng (%). Nếu 2 câu khác nhau \> 5%, sẽ tách đoạn. |
-| `MIN_CHUNK_SIZE` | 500 | Kích thước tối thiểu của một đoạn văn bản. |
-| `MAX_NEW_TOKENS` | 512 | Độ dài tối đa câu trả lời của AI. |
-| `TEMPERATURE` | 0.2 | Độ sáng tạo của AI (thấp để chính xác hơn). |
+# Windows
+.\venv\Scripts\activate
 
-## 🤝 Đóng góp
+# Linux / macOS
+source venv/bin/activate
+```
 
-Dự án được xây dựng cho mục đích nghiên cứu Deep Learning và RAG. Mọi đóng góp (Pull Request) để cải thiện thuật toán Chunking hoặc thay thế Model đều được hoan nghênh.
+### 3️⃣ Install Dependencies
 
------
+```bash
+pip install -r requirements.txt
+```
 
-*Deep Learning Expert Edition - 2025*
+> **Note:** On Windows, you may need to install `bitsandbytes-windows` if you encounter bnb-related issues.
 
-## LICENSE
-Distributed under the MIT License. See LICENSE.txt for more information.
+---
 
-Copyright (c) 2025 Pham Tung Lam
+## 📖 Usage Guide
 
+### 1️⃣ Launch the Application
 
+From the project root directory, run:
+
+```bash
+streamlit run app.py
+```
+
+### 2️⃣ Interact via Web Interface
+
+* Wait for the initial model loading (Vicuna + embeddings). This may take several minutes depending on network speed.
+* Upload PDF documents via the left sidebar.
+* Click **“🚀 Process Documents”** to:
+
+  * Perform **Semantic Chunking**
+  * Index embeddings into **ChromaDB**
+* Start chatting with your documents in a conversational manner.
+
+---
+
+## 🔧 Advanced Configuration
+
+Fine-tune system behavior via `src/config.py`:
+
+| Parameter                 | Default Value  | Description                                                |
+| ------------------------- | -------------- | ---------------------------------------------------------- |
+| `CHUNK_BREAKPOINT_TYPE`   | `"percentile"` | Breakpoint calculation strategy                            |
+| `CHUNK_BREAKPOINT_AMOUNT` | `95`           | Similarity percentile threshold (split if difference > 5%) |
+| `MIN_CHUNK_SIZE`          | `500`          | Minimum chunk length                                       |
+| `MAX_NEW_TOKENS`          | `512`          | Maximum generated response length                          |
+| `TEMPERATURE`             | `0.2`          | Controls randomness (lower = more factual)                 |
+
+---
+
+## 🤝 Contributions
+
+This project is designed for **Deep Learning and RAG research purposes**.
+Contributions are highly welcome — including:
+
+* Improved **semantic chunking strategies**
+* Alternative **LLMs or embedding models**
+* Retrieval optimization techniques
+
+Feel free to open a Pull Request 🚀
+
+---
+
+*Deep Learning – Expert Edition (2025)*
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**.
+See `LICENSE.txt` for details.
+
+**Copyright © 2025 Pham Tung Lam**
+
+---
 
 
